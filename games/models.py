@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -32,8 +33,31 @@ class Firma(models.Model):
 class Hra(models.Model):
     name = models.CharField(max_length=50, unique=False, verbose_name="Název hry",
                             help_text='Zadejte název hry')
+
+    class Jazyk(models.TextChoices):
+        ANGLICTINA = 'AN', _('Angličtina')
+        CESTINA = 'CE', _('Čeština')
+
+    jazyk = models.CharField(
+        max_length=2,
+        choices=Jazyk.choices,
+        default=Jazyk.ANGLICTINA,
+    )
     zanr = models.CharField(max_length=50, unique=False, verbose_name="Žánr",
                             help_text='Zadejte žánr hry')
+
+    class Rating(models.TextChoices):
+        E = 'EE', _('E')
+        SEVEN = 'SE', _('7')
+        TWELVE = 'TW', _('12')
+        FIFTEEN = 'FI', _('15')
+        EIGHTEEN = 'EI', _('18')
+
+    rating = models.CharField(
+        max_length=2,
+        choices=Rating.choices,
+        default=Rating.E,
+    )
     popis = models.TextField(blank=True, null=True, verbose_name="Popis")
     vydavatel = models.ManyToManyField(Firma, help_text='Vyberte vydavatele hry')
 
@@ -53,7 +77,7 @@ class Vydani(models.Model):
         ordering = ["datum"]
 
     def __str__(self):
-        return self.name
+        return f"{self.datum}"
 
 
 class Recenzenti(models.Model):
@@ -65,11 +89,26 @@ class Recenzenti(models.Model):
         ordering = ["pocet_hvezd"]
 
     def __str__(self):
-        return self.name
+        return self.popis
 
 
 class Recenze(models.Model):
+    class Role(models.TextChoices):
+        UZIVATEL = 'UZ', _('Uživatel')
+        REDAKCE = 'RE', _('Redakce')
+
+    role = models.CharField(
+        max_length=2,
+        choices=Role.choices,
+        default=Role.UZIVATEL,
+    )
     prezdivka = models.CharField(max_length=50, unique=True, verbose_name="Přezdívka",
                                  help_text='Zadejte přezdívku')
     recenze = models.ManyToManyField(Recenzenti, help_text='Zadejte recenzi')
     hra = models.ManyToManyField(Hra, help_text='Vyberte hru na kterou recenze patří')
+
+    class Meta:
+        ordering = ["prezdivka"]
+
+    def __str__(self):
+        return self.prezdivka
