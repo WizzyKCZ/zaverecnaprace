@@ -5,3 +5,5 @@ from .models import *
 
 admin.site.register(Platforma)
 admin.site.register(Firma)
+admin.site.register(Hra)
+admin.site.register(Vydani)
