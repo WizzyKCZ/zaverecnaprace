@@ -54,3 +54,22 @@ class Vydani(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Recenzenti(models.Model):
+    pocet_hvezd = models.IntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)], null=False,
+                                      help_text="Zadejte počet hvězd",verbose_name="rate")
+    popis = models.TextField(blank=True, null=True, verbose_name="Popis")
+
+    class Meta:
+        ordering = ["pocet_hvezd"]
+
+    def __str__(self):
+        return self.name
+
+
+class Recenze(models.Model):
+    prezdivka = models.CharField(max_length=50, unique=True, verbose_name="Přezdívka",
+                                 help_text='Zadejte přezdívku')
+    recenze = models.ManyToManyField(Recenzenti, help_text='Zadejte recenzi')
+    hra = models.ManyToManyField(Hra, help_text='Vyberte hru na kterou recenze patří')
