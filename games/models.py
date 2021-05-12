@@ -47,11 +47,11 @@ class Hra(models.Model):
                             help_text='Zadejte žánr hry')
 
     class Rating(models.TextChoices):
-        E = 'EE', _('E')
-        SEVEN = 'SE', _('7')
-        TWELVE = 'TW', _('12')
-        FIFTEEN = 'FI', _('15')
-        EIGHTEEN = 'EI', _('18')
+        E = 'E', _('E')
+        SEVEN = '7', _('7')
+        TWELVE = '12', _('12')
+        FIFTEEN = '15', _('15')
+        EIGHTEEN = '18', _('18')
 
     rating = models.CharField(
         max_length=2,
@@ -77,7 +77,7 @@ class Vydani(models.Model):
         ordering = ["datum"]
 
     def __str__(self):
-        return f"{self.datum}"
+        return f"{self.hra}"
 
 
 class Recenzenti(models.Model):
@@ -112,3 +112,4 @@ class Recenze(models.Model):
 
     def __str__(self):
         return self.prezdivka
+

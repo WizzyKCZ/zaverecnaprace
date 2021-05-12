@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mt-3 mb-3 bg-warning p-3">
+    <div class="col-sm-12">
+        <h2 class="text-center">Hry v češtině</h2>
+    </div>
+</div>
+<div class="row">
+    {% for hra in hras %}
+    <div class="col-sm-4">
+        <div class="card">
+            {% if hra.poster %}
+            <img class="card-img-top" src="{{ hra.poster.url }}" alt="{{ hra.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">{{ hra.name }}</h4>
+                <p class="card-text"><strong>Žánry:</strong> {{ hra.zanr }}</p>
+                <p><strong>Hodnocení:</strong> {{ hra.rating }}</p>
+                <a href="#" class="btn btn-primary">Podrobnosti</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <strong>Celkový počet her:</strong> {{ num_hras }}
+    </div>
+</div>
+{% endblock %}
