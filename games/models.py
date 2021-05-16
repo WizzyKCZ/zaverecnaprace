@@ -1,9 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
-# Create your models here.
 
 
 class Platforma(models.Model):
@@ -58,6 +55,7 @@ class Hra(models.Model):
         choices=Rating.choices,
         default=Rating.E,
     )
+    plakat = models.ImageField(upload_to='hra/plakat/%Y/%m/%d/', blank=True, null=True, verbose_name="plakat")
     popis = models.TextField(blank=True, null=True, verbose_name="Popis")
     vydavatel = models.ManyToManyField(Firma, help_text='Vyberte vydavatele hry')
 

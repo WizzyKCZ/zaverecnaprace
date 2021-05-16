@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% block title %}{{ view_title }}{% endblock %}
 
 {% block content %}
-<div class="row mt-3 mb-3 bg-warning p-3">
-    <div class="col-sm-12">
-        <h2 class="text-center">Hry v češtině</h2>
+<div class="row mb-3">
+    <div class="col-sm-12 bg-warning">
+        <h2 class="display-4 text-center">Přehled her</h2>
     </div>
 </div>
 <div class="row">
@@ -17,15 +18,21 @@
                 <h4 class="card-title">{{ hra.name }}</h4>
                 <p class="card-text"><strong>Žánry:</strong> {{ hra.zanr }}</p>
                 <p><strong>Rating:</strong> {{ hra.rating }}</p>
-                <a href="#" class="btn btn-primary">Podrobnosti</a>
+                <a href="{% url 'hra_detail' hra.pk %}" class="btn btn-primary">Podrobnosti</a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-<div class="row">
+{% if is_paginated %}
+<div class="row mt-5">
+    <div class="col-12">
+    </div>
+</div>
+{% endif %}
+<div class="row mt-3">
     <div class="col-sm-12">
-        <strong>Celkový počet her:</strong> {{ num_hras }}
+        <h4>Celkový počet her: {{ num_hras }}</h4>
     </div>
 </div>
 {% endblock %}
