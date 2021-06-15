@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 
 class Platforma(models.Model):
@@ -32,11 +33,11 @@ class Hra(models.Model):
                             help_text='Zadejte název hry')
 
     class Jazyk(models.TextChoices):
-        ANGLICTINA = 'AN', _('Angličtina')
-        CESTINA = 'CE', _('Čeština')
+        ANGLICTINA = 'Angličtina', _('Angličtina')
+        CESTINA = 'Čeština', _('Čeština')
 
     jazyk = models.CharField(
-        max_length=2,
+        max_length=10,
         choices=Jazyk.choices,
         default=Jazyk.ANGLICTINA,
     )
@@ -58,6 +59,10 @@ class Hra(models.Model):
     plakat = models.ImageField(upload_to='hra/plakat/%Y/%m/%d/', blank=True, null=True, verbose_name="plakat")
     popis = models.TextField(blank=True, null=True, verbose_name="Popis")
     vydavatel = models.ManyToManyField(Firma, help_text='Vyberte vydavatele hry')
+    platforma = models.ManyToManyField(Platforma, help_text='Vyberte platformu')
+    datum_vydani = models.DateField(blank=True, null=True,
+                                    help_text="Please use the following format: <em>YYYY-MM-DD</em>.",
+                                    verbose_name="Release date")
 
     class Meta:
         ordering = ["name"]
@@ -65,49 +70,9 @@ class Hra(models.Model):
     def __str__(self):
         return self.name
 
+    def release_year(self):
+        return self.datum_vydani.year
 
-class Vydani(models.Model):
-    datum = models.DateField(blank=False, null=False, help_text="Zadejte datum vydání hry",verbose_name="Release date")
-    hra = models.ManyToManyField(Hra, help_text='Vyberte hru která vychází tento den')
-    platforma = models.ManyToManyField(Platforma, help_text='Vyberte platformu na kterou vychází hra')
-
-    class Meta:
-        ordering = ["datum"]
-
-    def __str__(self):
-        return f"{self.hra}"
-
-
-class Recenzenti(models.Model):
-    pocet_hvezd = models.IntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)], null=False,
-                                      help_text="Zadejte počet hvězd",verbose_name="rate")
-    popis = models.TextField(blank=True, null=True, verbose_name="Popis")
-
-    class Meta:
-        ordering = ["pocet_hvezd"]
-
-    def __str__(self):
-        return self.popis
-
-
-class Recenze(models.Model):
-    class Role(models.TextChoices):
-        UZIVATEL = 'UZ', _('Uživatel')
-        REDAKCE = 'RE', _('Redakce')
-
-    role = models.CharField(
-        max_length=2,
-        choices=Role.choices,
-        default=Role.UZIVATEL,
-    )
-    prezdivka = models.CharField(max_length=50, unique=True, verbose_name="Přezdívka",
-                                 help_text='Zadejte přezdívku')
-    recenze = models.ManyToManyField(Recenzenti, help_text='Zadejte recenzi')
-    hra = models.ManyToManyField(Hra, help_text='Vyberte hru na kterou recenze patří')
-
-    class Meta:
-        ordering = ["prezdivka"]
-
-    def __str__(self):
-        return self.prezdivka
-
+    def get_absolute_url(self):
+        """Metoda vrací URL stránky, na které se vypisují podrobné informace o filmu"""
+        return reverse('hra_detail', args=[str(self.id)])

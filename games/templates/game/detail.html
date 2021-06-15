@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Detail hry{% endblock %}
+{% block css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-sm-12 bg-DARK">
+        <h2 class="text-center text-white">Podrobné informace</h2>
+    </div>
+</div>
+<div class="row mt-5 mb-3 text-center">
+    <div style="margin: 0% 20%">
+        <h2 class="display-4 mb-3">{{ hra_detail.name }}</h2>
+        <div class="bg-secondary text-light p-2 mb-3">Platforma:
+            {% for plat in hra_detail.platforma.all %}
+                {{ plat.name }}
+            {% endfor %}
+            | Jazyk hry: {{ hra_detail.jazyk }} | Žánr hry: {{ hra_detail.zanr }} | Rating: {{ hra_detail.rating }}
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <h4>Datum vydání: {{ hra_detail.datum_vydani }}</h4>
+                {{ hra_detail.popis }}
+            </div>
+            <div class="col-md-3">
+                {% if hra_detail.plakat %}
+                <a href="{{ hra_detail.plakat.url }}" data-toggle="lightbox" data-gallery="gallery">
+                    <img src="{{ hra_detail.plakat.url }}" class="img-fluid" alt="Plakát ke hre">
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-sm-12 text-center">
+        <a href="{% url 'hra-update' hra_detail.pk %}" class="btn btn-primary">Upravit</a>
+        <a href="{% url 'hra-delete' hra_detail.pk %}" class="btn btn-danger">Smazat</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+<script>
+    $(document).on("click", '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+</script>
+{% endblock %}

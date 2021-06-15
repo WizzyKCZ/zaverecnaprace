@@ -12,3 +12,6 @@ urlpatterns = [
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+admin.site.site_header = "DDH Administrace"
+admin.site.site_title = "Databáze digitálních her"
+admin.site.index_title = "Vítejte v administrační části DDH"

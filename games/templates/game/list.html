@@ -3,13 +3,13 @@
 
 {% block content %}
 <div class="row mb-3">
-    <div class="col-sm-12 bg-warning">
-        <h2 class="display-4 text-center">Přehled her</h2>
+    <div class="col-sm-12 bg-dark">
+        <h2 class="text-center text-white">Přehled her</h2>
     </div>
 </div>
 <div class="row">
     {% for hra in hras %}
-    <div class="col-sm-4">
+    <div class="col-sm-2">
         <div class="card">
             {% if hra.plakat %}
             <img class="card-img-top" src="{{ hra.plakat.url }}" alt="{{ hra.name }}">
@@ -33,6 +33,11 @@
 <div class="row mt-3">
     <div class="col-sm-12">
         <h4>Celkový počet her: {{ num_hras }}</h4>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-sm-12 text-center">
+        <a href="{% url 'hra-create' %}" class="btn btn-success">Nová hra</a>
     </div>
 </div>
 {% endblock %}
