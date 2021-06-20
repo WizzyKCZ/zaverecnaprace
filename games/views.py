@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from games.forms import HraModelForm
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
